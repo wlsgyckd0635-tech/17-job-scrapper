@@ -5,7 +5,7 @@ from file import save_to_csv
 app = Flask(__name__)
 
 db = {}
-page = 5
+page = 2
 
 @app.route('/')
 def hello_world():
