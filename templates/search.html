@@ -9,13 +9,14 @@
   <body>
     <main class="container">
       <h1>{{ count }} 개의 {{ keyword }} 검색 한 결과입니다</h1>
-      <p>인크루트, 고용24, 잡코리아 사이트의 검색결과를 확인할 수 있습니다.</p>
+      <p>인크루트, 사람인 사이트의 검색결과를 확인할 수 있습니다.</p>
       <a href="/file?keyword={{keyword}}"> <button>데이터 다운로드</button></a>
       <p></p>
       <table>
         <thead data-theme="dark">
           <tr>
             <th>No</th>
+            <th>출처</th>
             <th>회사</th>
             <th>공고제목</th>
             <th>지역</th>
@@ -25,11 +26,59 @@
           {% for num, job in jobs %}
           <tr>
             <td>{{ num + 1 }}</td>
-            <td>{{ job["company"] }}</td>
-            <td>
-              <a href="{{ job['link'] }}" target="_blank">{{ job["title"] }}</a>
+
+            <td style="white-space: nowrap; vertical-align: middle">
+              {% if job.get('source') == '사람인' %}
+              <span
+                style="
+                  background-color: #4caf50;
+                  color: white;
+                  padding: 4px 8px;
+                  border-radius: 4px;
+                  font-size: 0.75rem;
+                  font-weight: bold;
+                  display: inline-block;
+                  white-space: nowrap;
+                "
+              >
+                사람인
+              </span>
+              {% else %}
+              <span
+                style="
+                  background-color: #2196f3;
+                  color: white;
+                  padding: 4px 8px;
+                  border-radius: 4px;
+                  font-size: 0.75rem;
+                  font-weight: bold;
+                  display: inline-block;
+                  white-space: nowrap;
+                "
+              >
+                인크루트
+              </span>
+              {% endif %}
             </td>
-            <td>{{ job["location"] }}</td>
+
+            <td>
+              {{ job.get('company') or job.get('corporate') or job.get('name')
+              or '정보 없음' }}
+            </td>
+
+            <td>
+              <a
+                href="{{ job.get('link') or job.get('url') or '#' }}"
+                target="_blank"
+              >
+                {{ job.get('title') or job.get('subject') or '공고 보기' }}
+              </a>
+            </td>
+
+            <td>
+              {{ job.get('location') or job.get('area') or job.get('region') or
+              '전국' }}
+            </td>
           </tr>
           {% endfor %}
         </tbody>
